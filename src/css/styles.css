@@ -7,9 +7,10 @@ body {
         Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #fafafa;
+    background-color: #292828;
     color: #212121;
     line-height: 1.5;
+
 }
 
 .search-form{
@@ -19,26 +20,48 @@ body {
 
     padding: 20px 40px;
 
-    background: linear-gradient(135deg, #fffb87 0%, #2b5723 50%, #5fc3e4 100%);
+    background: linear-gradient(135deg, #000000 0%, #1e3d18 50%, #000000 100%);
+    border-bottom: 3px double #000;
+    border-top: 3px double #000;
 }
+
 [name="searchQuery"]{
     display: block;
 
-    height: 40px;
-    min-width: 320px;
+    height: 44px;
+    min-width: 520px;
     border-radius: 4px;
+    box-shadow: #212121 4px 4px 4px;
 }
-button{
+
+.search-Btn, .load-more{
     margin: 15px;
 
     height: 44px;
     min-width: 140px;
+    /* border:1px double #fff; */
     border-radius: 4px;
 
-    background-color: rgb(34, 128, 28);
+    background-image: radial-gradient(rgb(17, 105, 52) 20%, #000);
+    box-shadow: #212121 4px 4px 4px;
 
     font-weight: bold;
     color: #fff;
+
+    cursor: pointer;
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-Btn:hover,.search-Btn:focus, 
+.load-more:hover,.load-more:focus,
+.back-to-top:hover, .back-to-top:focus{
+    box-shadow: #212121 2px 2px 4px;
+    background-image: radial-gradient(rgb(15, 160, 73), #000);
+}
+
+.search-Btn:active,.load-more:active,.back-to-top:active{
+    box-shadow: #212121 -2px -2px 2px;
 }
 
 .load-more{
@@ -56,4 +79,69 @@ button{
     padding: 0;
     clip: rect(0 0 0 0);
     overflow: hidden;
+}
+
+.gallery{
+    display: flex;
+    flex-wrap: wrap;
+
+    margin: -10px;
+    padding: 30px 10px;
+}
+
+.photo-card{
+    width: calc((100% - 20px * 4) / 4);
+    min-height: 180px;
+    border-radius: 10px;
+    overflow: hidden;
+    
+    margin: 10px;
+
+    border: 1px solid #212121;
+    box-shadow: #212121 4px 4px 4px;
+}
+
+.thumb{
+    display: block;
+    overflow: hidden;
+}
+
+.thumb img{
+    display: block;
+
+}
+
+.info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    background-color: #fff;
+}
+
+.info-item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.back-to-top{
+    display: block;
+    text-align: center;
+
+    margin: 0 auto 30px;
+    padding: 10px 0;
+
+    width: 150px;
+    height: 45px;
+    background-image: radial-gradient(rgb(7, 95, 42), #000);
+    border-radius: 4px;
+    box-shadow: #212121 4px 4px 4px;
+
+    text-decoration: none;
+    color: #fff;
+
+    cursor: pointer;
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
