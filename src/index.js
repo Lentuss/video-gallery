@@ -137,4 +137,12 @@ const imageOnClick = (e) => {
 
 form.addEventListener("submit", onSubmit)
 loadMoreBtn.addEventListener("click", onLoadMore);
-gallery.addEventListener("click",imageOnClick)
+gallery.addEventListener("click", imageOnClick);
+
+backToTopBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        form.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    });
