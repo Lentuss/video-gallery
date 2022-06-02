@@ -1,13 +1,7 @@
-//плавный скролл
-//бесконечный скролл
+import { Notify } from 'notiflix';
+import { searchVideo } from "./pixabay";
 
-import SimpleLightbox from "simplelightbox";
-import Notiflix, { Notify } from 'notiflix';
-import { searchPics } from "./pixabay";
-
-import "simplelightbox/dist/simple-lightbox.min.css";
 import './css/styles.css';
-import simpleLightbox from "simplelightbox";
 
 const form = document.querySelector("#search-form");
 const input = document.querySelector("input");
@@ -15,79 +9,70 @@ const gallery = document.querySelector(".gallery");
 const loadMoreBtn = document.querySelector(".load-more");
 const backToTopBtn = document.querySelector(".back-to-top");
 
+const myListBtn = document.querySelector(".myList");
+const addBtn = document.querySelector(".addBtn");
+
 let page = 1;
 let query = "";
-let lightbox;
 
 loadMoreBtn.classList.add("isHidden");
 
 const createGallery = async () => {
-    let markup;
 
     try {
-        const data = await searchPics(query, page)
+        const data = await searchVideo(query)
+        const res = data.results;
 
-        if (page === 1 && data.totalHits) {
-            Notify.success(`Hooray! We found ${data.totalHits} images.`)
+        if (res.length==0) {
+            Notify.failure("Sorry, there are no movies matching your search query. Please try again.")
         }
 
-        if (!data.totalHits) {
-            Notify.failure("Sorry, there are no images matching your search query. Please try again.")
-        }
+        // else {
+        //     checkQuantity(data);
+        // }
 
-        else {
-            checkQuantity(data);
-        }
-
-        data.hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
-          
-            markup =
-                `<div class="photo-card">
-                    <div class="thumb">
-                        <a class="photo-link" href="${webformatURL}">
-                            <img src="${largeImageURL}" alt="${tags}" loading="lazy" height="260px"/>
-                        </a>
-                    </div>
-                    <div class="info">
-                        <p class="info-item">
-                            <b>Likes</b>
-                            <span>${likes}</span>
-                        </p>
-                        <p class="info-item">
-                            <b>Views</b>
-                            <span>${views}</span>
-                        </p>
-                        <p class="info-item">
-                            <b>Comments</b>
-                            <span>${comments}</span>
-                        </p>
-                        <p class="info-item">
-                            <b>Downloads</b>
-                            <span>${downloads}</span>
-                        </p>
-                    </div>
-                </div>`;
-                
-            gallery.insertAdjacentHTML("beforeend", markup);
+        console.log(data);
+        console.log(data.results.length);
+        console.log(data.results);
+       
+        res.map(({ title, image, description, id }) => {
+            gallery.insertAdjacentHTML("beforeend", createMarkup(title, image, description));
+            const elId = id;
         })
-            addGallery()
-        
     } catch (error) { Notify.failure("Oops") }
 }
 
-const checkQuantity = (data) => {  
-    let imageQuantity = data.hits.length;
+const createMarkup = (title, image, description) => 
+                `<div class="card">
+                    <div class="thumb">
+                      <img src="${image}" alt="${title}" loading="lazy" height="100%"/>
+                        </div>
+                    <div class="info">
+                        <p class="info-item">
+                            <b>Title</b>
+                            <span>${title}</span>
+                        </p>
+                        <p class="info-item">
+                            <b>Year</b>
+                            <span>${description}</span>
+                        </p>
+                        <button type="button" class="addBtn" data-set="add-to-list-button">Add to my list</button>
+                    </div>
+                </div>`;
+                
+// const checkQuantity = (data) => {  
+//     let imageQuantity = data.hits.length;
 
-    if (imageQuantity >= 40) {           
-        loadMoreBtn.classList.remove("isHidden");
+//     if (imageQuantity >= 40) {           
+//         loadMoreBtn.classList.remove("isHidden");
 
-    } else {
-        Notify.warning ("We're sorry, but you've reached the end of search results.");
+//     } else {
+//         Notify.warning ("We're sorry, but you've reached the end of search results.");
 
-        loadMoreBtn.classList.add("isHidden");
-        backToTopBtn.classList.remove("isHidden");
-    }
-}
+//         loadMoreBtn.classList.add("isHidden");
+//         backToTopBtn.classList.remove("isHidden");
+//     }
+// }
 
 const checkQuery = () => {
     if (query == "") {
@@ -98,13 +83,6 @@ const checkQuery = () => {
     } 
 }
 
-const addGallery = () => {
-   lightbox = new SimpleLightbox('.gallery a', {
-            caption: true,
-            captionsData: 'alt',
-            captionDelay: 250,
-        }).refresh();
-}
 
 const onSubmit = (e)=>{
     e.preventDefault()
@@ -112,37 +90,38 @@ const onSubmit = (e)=>{
     gallery.innerHTML = "";
     query = input.value;
     page = 1;
-
+    
     checkQuery();
-
+    
     backToTopBtn.classList.add("isHidden");
     loadMoreBtn.classList.add("isHidden");
     input.value = "";
 }
-    
+
+
 const onLoadMore = () => {
     page += 1;
     lightbox.destroy();
-
+    
     createGallery(query, page);
 }
 
-const imageOnClick = (e) => {
-    e.preventDefault();
-
-    if (e.target.nodeName !== "IMG") {
-        return
-    }
+const addToList = (e) => {
+    if (e.target.nodeName == "BUTTON") {
+    console.log('wooooooooooooow');
+}
+  console.log("hello");
 }
 
-form.addEventListener("submit", onSubmit)
+form.addEventListener("submit", onSubmit);
 loadMoreBtn.addEventListener("click", onLoadMore);
-gallery.addEventListener("click", imageOnClick);
+gallery.addEventListener("click", addToList);
 
-backToTopBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        form.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    });
+
+// backToTopBtn.addEventListener('click', function (e) {
+//         e.preventDefault();
+//         form.scrollIntoView({
+//             behavior: 'smooth',
+//             block: 'start'
+//         });
+//     });
