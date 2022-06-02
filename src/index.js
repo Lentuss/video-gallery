@@ -1,5 +1,5 @@
 import { Notify } from 'notiflix';
-import { searchVideo } from "./pixabay";
+import { searchVideo } from "./api";
 
 import './css/styles.css';
 
